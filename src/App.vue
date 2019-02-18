@@ -19,7 +19,7 @@
             <div class="wrapper-left">
               <div id="current-weather">
                 {{ currentWeather.temp }}
-                <span>°C</span>
+                <span>°F</span>
               </div>
               <div id="weather-desc">{{ currentWeather.summary }}</div>
               <div class="temp-max-min">
@@ -27,7 +27,7 @@
                   <div id="max-detail">
                     <i>▲</i>
                     {{ currentWeather.todayHighLow.todayTempHigh }}
-                    <span>°C</span>
+                    <span>°F</span>
                   </div>
                   <div id="max-summary">at {{ currentWeather.todayHighLow.todayTempHighTime }}</div>
                 </div>
@@ -35,7 +35,7 @@
                   <div id="min-detail">
                     <i>▼</i>
                     {{ currentWeather.todayHighLow.todayTempLow }}
-                    <span>°C</span>
+                    <span>°F</span>
                   </div>
                   <div id="min-summary">at {{ currentWeather.todayHighLow.todayTempLowTime }}</div>
                 </div>
@@ -355,7 +355,7 @@ export default {
     },
     getSetCurrentTemp: function() {
       var currentTemp = this.rawWeatherData.currently.temperature;
-      this.currentWeather.temp = this.fahToCel(currentTemp);
+      this.currentWeather.temp = currentTemp;
     },
     getTodayDetails: function() {
       return this.rawWeatherData.daily.data[0];
@@ -363,16 +363,14 @@ export default {
     getSetTodayTempHighLowWithTime: function() {
       var timezone = this.getTimezone();
       var todayDetails = this.getTodayDetails();
-      this.currentWeather.todayHighLow.todayTempHigh = this.fahToCel(
-        todayDetails.temperatureMax
-      );
+      this.currentWeather.todayHighLow.todayTempHigh =
+        todayDetails.temperatureMax;
       this.currentWeather.todayHighLow.todayTempHighTime = this.unixToHuman(
         timezone,
         todayDetails.temperatureMaxTime
       ).onlyTime;
-      this.currentWeather.todayHighLow.todayTempLow = this.fahToCel(
-        todayDetails.temperatureMin
-      );
+      this.currentWeather.todayHighLow.todayTempLow =
+        todayDetails.temperatureMin;
       this.currentWeather.todayHighLow.todayTempLowTime = this.unixToHuman(
         timezone,
         todayDetails.temperatureMinTime
@@ -393,9 +391,7 @@ export default {
         if (todayMonthDate === hourlyMonthDate) {
           var hourlyObject = { hour: "", temp: "" };
           hourlyObject.hour = hourlyOnlyTime;
-          hourlyObject.temp = this.fahToCel(
-            hourlyData[i].temperature
-          ).toString();
+          hourlyObject.temp = hourlyData[i].temperature.toString();
           this.tempVar.tempToday.push(hourlyObject);
           /*
           Since we are using array.push(), we are just adding elements
@@ -436,14 +432,12 @@ export default {
       this.highlights.uvIndex = uvIndex;
     },
     getSetVisibility: function() {
-      var visibilityInMiles = this.rawWeatherData.currently.visibility;
-      this.highlights.visibility = this.mileToKilometer(visibilityInMiles);
+      const visibilityInMiles = this.rawWeatherData.currently.visibility;
+      this.highlights.visibility = visibilityInMiles;
     },
     getSetWindStatus: function() {
       var windSpeedInMiles = this.rawWeatherData.currently.windSpeed;
-      this.highlights.windStatus.windSpeed = this.mileToKilometer(
-        windSpeedInMiles
-      );
+      this.highlights.windStatus.windSpeed = windSpeedInMiles;
       var absoluteWindDir = this.rawWeatherData.currently.windBearing;
       this.highlights.windStatus.windDirection = absoluteWindDir;
       this.highlights.windStatus.derivedWindDirection = this.deriveWindDir(
